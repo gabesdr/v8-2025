@@ -20,7 +20,19 @@ function toggleTodoItemStatus(item, isShown = true) {
  * @returns {void}
  */
 function removeTodoItem(item) {
-  /* TODO útfæra */
+  console.log("EYÐA", item);
+  const spanEl = item.querySelector("span.item");
+
+  let text = "<unknown item>";
+  if (!spanEl) {
+    console.warn("cannot find spanEl");
+  } else {
+    text = spanEl.textContent;
+  }
+
+  if (confirm(`Viltu eyða „${text}“?`)) {
+    item.remove();
+  }
 }
 
 /**
@@ -43,11 +55,30 @@ function clearList(todolist) {
 
 /**
  * Uppfærir upplýsingar um fjölda kláraðra og ókláraðra atriða í lista.
- * @param {Element | null} todoList
+ * @param {HTMLElement} todolist
  * @return {void}
  */
-function updateStats(todoList) {
-  /* TODO útfæra */
+export function updateStats(todolist) {
+  const finishedEl = todolist.querySelector(".stats .finished");
+  const unfinishedEl = todolist.querySelector(".stats .unfinished");
+
+  if (!finishedEl || !unfinishedEl) {
+    console.warn("could not find finished/unfinished nodes");
+    return;
+  }
+
+  const allItems = todolist.querySelectorAll(".list li");
+  const allFinishedItems = todolist.querySelectorAll(".list li.finished");
+
+  if (!allItems || !allFinishedItems) {
+    return;
+  }
+
+  const finishedCount = allFinishedItems.length;
+  const unfinishedCount = allItems.length - finishedCount;
+
+  finishedEl.textContent = finishedCount.toString();
+  unfinishedEl.textContent = unfinishedCount.toString();
 }
 
 /**
@@ -56,8 +87,50 @@ function updateStats(todoList) {
  * @param {string} text
  * @return {void}
  */
-function createTodoItem(todolist, text) {
-  /* TODO útfæra */
+export function createTodoItem(todolist, text) {
+  // console.log('hi frá createTodoItem', todolist, text)
+
+  /*
+<li>
+  <label>
+    <input type="checkbox" name="finished"  />
+    <span class="item"
+      >Dæmi um atriði með löngum texta og orði sem er mjög langt
+      Vaðlaheiðarvegavinnuverkfærageymsluskúrslyklakippuhringurinn</span
+    >
+  </label>
+  <button title="Fjarlægja atriði">🗑️</button>
+</li>
+  */
+  const li = document.createElement("li");
+
+  const button = document.createElement("button");
+  button.textContent = "🗑️";
+  button.addEventListener("click", () => {
+    removeTodoItem(li);
+    updateStats(todolist);
+  });
+
+  const input = document.createElement("input");
+  input.setAttribute("type", "checkbox");
+  input.setAttribute("name", "finished");
+  input.addEventListener("change", () => {
+    console.log("input", input.checked);
+  });
+
+  const span = document.createElement("span");
+  span.classList.add("item");
+  span.textContent = text;
+
+  const label = document.createElement("label");
+
+  label.appendChild(input);
+  label.appendChild(span);
+  li.appendChild(label);
+  li.appendChild(button);
+
+  const list = todolist.querySelector("ul.list");
+  list?.appendChild(li);
 }
 
 /**

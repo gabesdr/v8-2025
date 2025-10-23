@@ -1,9 +1,6 @@
-/* TODO import á allt viðeigandi úr ./lib/todo.js */
 import { 
   updateStats, 
-  createTodoItemElement, 
-  toggleTodoItemStatus, 
-  removeTodoItem, 
+  createTodoItem, 
   toggleFinished, 
   clearList 
 } from "./lib/todo.js";
@@ -12,33 +9,39 @@ import {
  * @param {HTMLElement} todolist
  */
 function initialize(todolist) {
-  const form = todolist.querySelector('.form')
+  const form = todolist.querySelector('.form');
+  const input = form?.querySelector('input[type="text"]');
+  const hideFinishedButton = todolist.querySelector('.toggle-finished');
+  const clearButton = todolist.querySelector('.clear-list');
 
-  if (!form) {
-    console.error('form fannst ekki, hætti')
+  if (!form || !input) {
+    console.error('form eða input fannst ekki, hætti');
     return;
   }
 
-  console.log(form)
-
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-    
-    if (!input) {
-      console.error('input fannst ekki');
-      return;
+
+    const value = input.value.trim();
+
+    if (value) {
+      createTodoItem(todolist, value);
+      updateStats(todolist);
+      input.value = '';
+      input.focus();
     }
+  });
 
-    const value = input.value;
+  hideFinishedButton?.addEventListener('click', () => {
+    const areShown = toggleFinished(todolist);
+    hideFinishedButton.textContent = areShown ? 'Fela kláruð' : 'Sýna kláruð';
+  });
 
-    createTodoItem(todolist, value);
-    updateStats(todolist);
-  })
-  /* TODO finna form */
-  /* TODO setja submit event handler á form */
-  /* TODO finna gildi textareits í formi innan event handlers og búa til todo item útfrá því */
-  /* TODO tengja „Fela kláruð atriði“ og „Hreinsa lista“ takka */
+  clearButton?.addEventListener('click', () => {
+    clearList(todolist);
+  });
 }
+
 
 // Finnum todo lista og keyrum fall sem setur allt upp
 const todoList = document.querySelector(".todo-list");
