@@ -5,9 +5,9 @@ import { updateStats, createTodoItem } from "./lib/todo.js";
  * @param {HTMLElement} todolist
  */
 function initialize(todolist) {
-  const form = todolist.querySelector('.form')
+  const form = todolist.querySelector('.form');
   const input = form?.querySelector('input[type="text"]');
-  const hideFinishedButton = todolist.querySelector('.toggle-finished');
+  const hideFinishedButton = todolist.querySelector('.hide-finished');
   const clearButton = todolist.querySelector('.clear-list');
 
   if (!form) {

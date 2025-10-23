@@ -1,7 +1,5 @@
-import { empty } from "./utils/dom.js";
-
+import { el, empty } from "./elements.js";
 // Leyfilegt að breyta skilgreiningum á föllum og bæta við fleiri föllum.
-/* TODO merkja viðeigandi föll með `export` */
 
 /**
  * Breytir stöðu atriðis í lista. Ef kláruð atriði eru sýnd er það sýnt, annars er það falið um leið og það er klárað.
@@ -10,16 +8,17 @@ import { empty } from "./utils/dom.js";
  * @returns {void}
  */
 
-export function toggleTodoItemStatus(item, isShown = true) {
+function toggleTodoItemStatus(item, isShown = true) {
   const checkbox = item.querySelector('input[type="checkbox"]');
   if (!checkbox) {
     return;
   }
   const isFinished = checkbox.checked;
   item.classList.toggle('finished', isFinished);
-
-  if (!isShown && isFinished) {
+  if (isFinished && !isShown) {
     item.classList.add('hidden');
+  } else {
+    item.classList.remove('hidden');
   }
 }
 
@@ -28,9 +27,10 @@ export function toggleTodoItemStatus(item, isShown = true) {
  * @param {HTMLElement} item
  * @returns {void}
  */
-export function removeTodoItem(item) {
+function removeTodoItem(item) {
   console.log("EYÐA", item);
   const spanEl = item.querySelector("span.item");
+  const todolist = item.closest('.todo-list');
 
   let text = "<unknown item>";
   if (!spanEl) {
@@ -44,6 +44,7 @@ export function removeTodoItem(item) {
     if (todolist) {
       updateStats(todolist);
       checkListState(todolist);
+    }
   }
 }
 
@@ -53,7 +54,18 @@ export function removeTodoItem(item) {
  * @return {boolean} `true` if finished items are shown, `false` if hidden
  */
 function toggleFinished(todolist) {
-  /* TODO útfæra */
+  const finishedItems = todolist.querySelectorAll('.list li.finished');
+  if (finishedItems.length === 0) {
+    return true;
+  }
+
+  const isHidden = finishedItems[0].classList.contains('hidden');
+
+  finishedItems.forEach (item => {
+    item.classList.toggle('hidden', !isHidden);
+  });
+
+  return isHidden;
 }
 
 /**
@@ -79,7 +91,7 @@ function clearList(todolist) {
  * @param {HTMLElement} todolist
  * @return {void}
  */
-function updateStats(todolist) {
+export function updateStats(todolist) {
   const finishedEl = todolist.querySelector(".stats .finished");
   const unfinishedEl = todolist.querySelector(".stats .unfinished");
 
@@ -108,7 +120,7 @@ function updateStats(todolist) {
  * @param {string} text
  * @return {void}
  */
-function createTodoItem(todolist, text) {
+export function createTodoItem(todolist, text) {
   const li = document.createElement("li");
 
   const button = document.createElement("button");
@@ -147,10 +159,13 @@ function createTodoItem(todolist, text) {
  */
 function checkListState(todolist) {
   const list = todolist.querySelector('ul.list');
-  const emptyState = todolist.querySelector('.empty-state');
-  if (!list || !emptyState) {
+  const emptyMessage = todolist.querySelector('.empty');
+
+  if (!list || !emptyMessage) {
     return;
   }
-  emptyState.classList.toggle('hidden', list.children.length > 0);
 
+  const hasItems = list.children.length > 0;
+  list.classList.toggle('hidden', !hasItems);
+  emptyMessage.classList.toggle('hidden', hasItems);
 }
