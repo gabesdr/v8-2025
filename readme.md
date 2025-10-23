@@ -182,22 +182,12 @@ Skilaboð skulu innihalda:
   - `osk`
   - `reynirjr`
 
-## Aðstoð
-
-Leyfilegt er að ræða, og vinna saman að verkefni en **skrifið ykkar eigin lausn**. Ef tvær eða fleiri lausnir eru mjög líkar þarf að færa rök fyrir því, annars munu allir hlutaðeigandi hugsanlega fá 0 fyrir verkefnið.
-
-Ekki er heimilt að nota stór mállíkön til að vinna verkefni í námskeiðinu, [sjá nánar um notkun](https://github.com/vefforritun/vef1-2025/blob/main/mallikon.md).
-
-## Verkefni og einkunn
-
-Sett verða fyrir tíu minni verkefni þar sem átta bestu gilda 5% hvert, samtals 40% af lokaeinkunn.
-
-Sett verða fyrir tvö hópverkefni þar sem hvort um sig gildir 10%, samtals 20% af lokaeinkunn.
-
-> Útgáfa 0.1
+> Útgáfa 0.3
 
 ## Útgáfusaga
 
 | Útgáfa | Lýsing                     |
 | ------ | -------------------------- |
 | 0.1    | Fyrsta útgáfa verkefnisins |
+| 0.2    | Final v1 |
+| 0.3    | Final v3 |
