@@ -21,8 +21,9 @@
           <div class="input-group">
             <label for="string">Verkefni:</label>
             <input
+              class="input"
               type="text"
-              name="string"
+              name="query"
               id="string"
               required
               placeholder="Heiti verkefnis"
@@ -32,9 +33,20 @@
           <button type="submit">Bæta við</button>
         </form>
 
-        <p class="empty">Engin atriði til að sýna!</p>
+        <p class="empty hidden">Engin atriði til að sýna!</p>
 
-        <ul class="list hidden">
+        <ul class="list">
+                    <li class="finished">
+            <label>
+              <input type="checkbox" name="finished" checked />
+              <span class="item"
+                >The lion is confused, but not lost</span
+              >
+            </label>
+            <button title="Fjarlægja atriði">🗑️</button>
+          </li>
+          <!-- Atriði bætast við hér með JavaScript, fjarlægðu athugasemd til að sjá dæmi -->
+          <!--
           <li class="finished">
             <label>
               <input type="checkbox" name="finished" checked />
@@ -59,6 +71,7 @@
             </label>
             <button title="Fjarlægja atriði">🗑️</button>
           </li>
+          -->
         </ul>
         <div class="stats">
           Kláruð: <span class="finished">0</span>, ókláruð:
