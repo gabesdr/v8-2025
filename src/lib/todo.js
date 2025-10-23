@@ -127,14 +127,16 @@ const li = document.createElement("li");
   button.textContent = "🗑️";
   button.addEventListener("click", () => {
     removeTodoItem(li);
-    updateStats(todolist);
   });
 
   const input = document.createElement("input");
   input.setAttribute("type", "checkbox");
   input.setAttribute("name", "finished");
   input.addEventListener("change", () => {
-    console.log("input", input.checked);
+    const hideFinishedButton = todolist.querySelector('.toggle-finished');
+    const areShown = hideFinishedButton?.textContent.includes('Fela');
+    toggleTodoItemStatus(li, areShown);
+    updateStats(todolist);
   });
 
   const span = document.createElement("span");
@@ -142,7 +144,6 @@ const li = document.createElement("li");
   span.textContent = text;
 
   const label = document.createElement("label");
-
   label.appendChild(input);
   label.appendChild(span);
   li.appendChild(label);
