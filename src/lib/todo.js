@@ -8,7 +8,7 @@ import { el, empty } from "./elements.js";
  * @returns {void}
  */
 
-function toggleTodoItemStatus(item, isShown = true) {
+export function toggleTodoItemStatus(item, isShown = true) {
   const checkbox = item.querySelector('input[type="checkbox"]');
   if (!checkbox) {
     return;
@@ -27,7 +27,7 @@ function toggleTodoItemStatus(item, isShown = true) {
  * @param {HTMLElement} item
  * @returns {void}
  */
-function removeTodoItem(item) {
+export function removeTodoItem(item) {
   console.log("EYÐA", item);
   const spanEl = item.querySelector("span.item");
   const todolist = item.closest('.todo-list');
@@ -53,15 +53,15 @@ function removeTodoItem(item) {
  * @param {HTMLElement} todolist
  * @return {boolean} `true` if finished items are shown, `false` if hidden
  */
-function toggleFinished(todolist) {
+export function toggleFinished(todolist) {
   const finishedItems = todolist.querySelectorAll('.list li.finished');
   if (finishedItems.length === 0) {
-    return true;
+    return true
   }
 
   const isHidden = finishedItems[0].classList.contains('hidden');
 
-  finishedItems.forEach (item => {
+  finishedItems.forEach(item => {
     item.classList.toggle('hidden', !isHidden);
   });
 
@@ -73,7 +73,7 @@ function toggleFinished(todolist) {
  * @param {HTMLElement} todolist
  * @return {void}
  */
-function clearList(todolist) {
+export function clearList(todolist) {
   const list = todolist.querySelector('ul.list');
   if (!list || list.children.length === 0) {
     return;
@@ -121,35 +121,30 @@ export function updateStats(todolist) {
  * @return {void}
  */
 export function createTodoItem(todolist, text) {
-  const li = document.createElement("li");
+  const list = todolist.querySelector("ul.list");
+  if (!list) {
+    return;
+  }
 
-  const button = document.createElement("button");
-  button.textContent = "🗑️";
-  button.addEventListener("click", () => {
-    removeTodoItem(li);
+  const checkbox = el('input', { type: 'checkbox', name: 'finished' });
+  const span = el('span', { class: 'item' }, text);
+  const label = el('label', {}, checkbox, span);
+  const button = el('button', { title: 'Fjarlægja atriði' }, '🗑️');
+  const li = el('li', {}, label, button);
+
+  checkbox.addEventListener('change', () => {
+    const hideFinishedButton = todolist.querySelector('.toggle-finished');
+    const areShown = hideFinishedButton?.textContent.includes('Fela');
+    toggleTodoItemStatus(li, areShown);
     updateStats(todolist);
   });
 
-  const input = document.createElement("input");
-  input.setAttribute("type", "checkbox");
-  input.setAttribute("name", "finished");
-  input.addEventListener("change", () => {
-    console.log("input", input.checked);
+  button.addEventListener('click', () => {
+    removeTodoItem(li);
   });
 
-  const span = document.createElement("span");
-  span.classList.add("item");
-  span.textContent = text;
-
-  const label = document.createElement("label");
-
-  label.appendChild(input);
-  label.appendChild(span);
-  li.appendChild(label);
-  li.appendChild(button);
-
-  const list = todolist.querySelector("ul.list");
-  list?.appendChild(li);
+  list.appendChild(li);
+  checkListState(todolist);
 }
 
 /**
@@ -157,7 +152,7 @@ export function createTodoItem(todolist, text) {
  * @param {HTMLElement} todolist
  * @return {void}
  */
-function checkListState(todolist) {
+export function checkListState(todolist) {
   const list = todolist.querySelector('ul.list');
   const emptyMessage = todolist.querySelector('.empty');
 

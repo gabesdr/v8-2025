@@ -6,27 +6,19 @@ import { updateStats, createTodoItem } from "./lib/todo.js";
  */
 function initialize(todolist) {
   const form = todolist.querySelector('.form');
-  const input = form?.querySelector('input[type="text"]');
-  const hideFinishedButton = todolist.querySelector('.hide-finished');
+  const hideFinishedButton = todolist.querySelector('.toggle-finished');
   const clearButton = todolist.querySelector('.clear-list');
+  const input = todolist.querySelector('input')
 
   if (!form) {
     console.error('form fannst ekki, hætti')
     return;
   }
 
-  console.log(form)
-
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     
-    const input = todolist.querySelector('input')
-
-    if (!input) {
-      console.error('input fannst ekki');
-      return;
-    }
-    const value = input.value;
+    const value = input.value.trim();
 
     if (value) {
       createTodoItem(todolist, value);
