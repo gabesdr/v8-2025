@@ -121,7 +121,7 @@ export function updateStats(todolist) {
  * @return {void}
  */
 export function createTodoItem(todolist, text) {
-  const li = document.createElement("li");
+const li = document.createElement("li");
 
   const button = document.createElement("button");
   button.textContent = "🗑️";
@@ -150,6 +150,8 @@ export function createTodoItem(todolist, text) {
 
   const list = todolist.querySelector("ul.list");
   list?.appendChild(li);
+  updateStats(todolist);
+  checkListState(todolist);
 }
 
 /**
