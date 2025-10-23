@@ -1,9 +1,4 @@
-import { 
-  updateStats, 
-  createTodoItem, 
-  toggleFinished, 
-  clearList 
-} from "./lib/todo.js";
+import { updateStats, createTodoItem, toggleFinished, clearList } from "./lib/todo.js";
 
 /**
  * @param {HTMLElement} todolist

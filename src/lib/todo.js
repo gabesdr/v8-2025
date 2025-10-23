@@ -1,7 +1,6 @@
-/* TODO hugsanlega importa el, empty úr ./elements.js */
+import { empty } from "./utils/dom.js";
 
 // Leyfilegt að breyta skilgreiningum á föllum og bæta við fleiri föllum.
-
 /* TODO merkja viðeigandi föll með `export` */
 
 /**
@@ -10,8 +9,18 @@
  * @param {boolean} isShown `true` ef kláruð atriði eru sýnileg, annars `false`.
  * @returns {void}
  */
-function toggleTodoItemStatus(item, isShown = true) {
-  /* TODO útfæra */
+
+export function toggleTodoItemStatus(item, isShown = true) {
+  const checkbox = item.querySelector('input[type="checkbox"]');
+  if (!checkbox) {
+    return;
+  }
+  const isFinished = checkbox.checked;
+  item.classList.toggle('finished', isFinished);
+
+  if (!isShown && isFinished) {
+    item.classList.add('hidden');
+  }
 }
 
 /**
@@ -19,7 +28,7 @@ function toggleTodoItemStatus(item, isShown = true) {
  * @param {HTMLElement} item
  * @returns {void}
  */
-function removeTodoItem(item) {
+export function removeTodoItem(item) {
   console.log("EYÐA", item);
   const spanEl = item.querySelector("span.item");
 
@@ -32,6 +41,9 @@ function removeTodoItem(item) {
 
   if (confirm(`Viltu eyða „${text}“?`)) {
     item.remove();
+    if (todolist) {
+      updateStats(todolist);
+      checkListState(todolist);
   }
 }
 
@@ -50,7 +62,16 @@ function toggleFinished(todolist) {
  * @return {void}
  */
 function clearList(todolist) {
-  /* TODO útfæra */
+  const list = todolist.querySelector('ul.list');
+  if (!list || list.children.length === 0) {
+    return;
+  }
+
+  if (confirm('Viltu eyða öllum atriðum á listanum?')) {
+    empty(list);
+    updateStats(todolist);
+    checkListState(todolist);
+  }
 }
 
 /**
@@ -58,7 +79,7 @@ function clearList(todolist) {
  * @param {HTMLElement} todolist
  * @return {void}
  */
-export function updateStats(todolist) {
+function updateStats(todolist) {
   const finishedEl = todolist.querySelector(".stats .finished");
   const unfinishedEl = todolist.querySelector(".stats .unfinished");
 
@@ -87,21 +108,7 @@ export function updateStats(todolist) {
  * @param {string} text
  * @return {void}
  */
-export function createTodoItem(todolist, text) {
-  // console.log('hi frá createTodoItem', todolist, text)
-
-  /*
-<li>
-  <label>
-    <input type="checkbox" name="finished"  />
-    <span class="item"
-      >Dæmi um atriði með löngum texta og orði sem er mjög langt
-      Vaðlaheiðarvegavinnuverkfærageymsluskúrslyklakippuhringurinn</span
-    >
-  </label>
-  <button title="Fjarlægja atriði">🗑️</button>
-</li>
-  */
+function createTodoItem(todolist, text) {
   const li = document.createElement("li");
 
   const button = document.createElement("button");
@@ -139,5 +146,11 @@ export function createTodoItem(todolist, text) {
  * @return {void}
  */
 function checkListState(todolist) {
-  /* TODO útfæra */
+  const list = todolist.querySelector('ul.list');
+  const emptyState = todolist.querySelector('.empty-state');
+  if (!list || !emptyState) {
+    return;
+  }
+  emptyState.classList.toggle('hidden', list.children.length > 0);
+
 }
