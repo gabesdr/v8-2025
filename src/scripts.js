@@ -1,4 +1,10 @@
-import { updateStats, createTodoItem } from "./lib/todo.js";
+import { 
+  toggleFinished, 
+  clearList, 
+  updateStats, 
+  createTodoItem, 
+  checkListState 
+} from "./lib/todo.js";
 
 /* TODO import á allt viðeigandi úr ./lib/todo.js */
 /**
@@ -6,9 +12,6 @@ import { updateStats, createTodoItem } from "./lib/todo.js";
  */
 function initialize(todolist) {
   const form = todolist.querySelector('.form');
-  const hideFinishedButton = todolist.querySelector('.toggle-finished');
-  const clearButton = todolist.querySelector('.clear-list');
-  const input = todolist.querySelector('input')
 
   if (!form) {
     console.error('form fannst ekki, hætti')
@@ -22,20 +25,28 @@ function initialize(todolist) {
 
     if (value) {
       createTodoItem(todolist, value);
-      updateStats(todolist);
       input.value = '';
       input.focus();
     }
   });
+
+  const input = todolist.querySelector('input') // Text Input fyrir nýtt atriði
+
+  const hideFinishedButton = todolist.querySelector('.toggle-finished'); // Toggle Finished State
 
   hideFinishedButton?.addEventListener('click', () => {
     const areShown = toggleFinished(todolist);
     hideFinishedButton.textContent = areShown ? 'Fela kláruð' : 'Sýna kláruð';
   });
 
+  const clearButton = todolist.querySelector('.clear-all'); // Clear all items
+
   clearButton?.addEventListener('click', () => {
     clearList(todolist);
   });
+
+  updateStats(todolist);
+  checkListState(todolist);
 }
 
 // Finnum todo lista og keyrum fall sem setur allt upp

@@ -1,4 +1,4 @@
-import { el, empty } from "./elements.js";
+import { empty } from "./elements.js";
 // Leyfilegt að breyta skilgreiningum á föllum og bæta við fleiri föllum.
 
 /**
@@ -121,30 +121,35 @@ export function updateStats(todolist) {
  * @return {void}
  */
 export function createTodoItem(todolist, text) {
-  const list = todolist.querySelector("ul.list");
-  if (!list) {
-    return;
-  }
+  const li = document.createElement("li");
 
-  const checkbox = el('input', { type: 'checkbox', name: 'finished' });
-  const span = el('span', { class: 'item' }, text);
-  const label = el('label', {}, checkbox, span);
-  const button = el('button', { title: 'Fjarlægja atriði' }, '🗑️');
-  const li = el('li', {}, label, button);
-
-  checkbox.addEventListener('change', () => {
-    const hideFinishedButton = todolist.querySelector('.toggle-finished');
-    const areShown = hideFinishedButton?.textContent.includes('Fela');
-    toggleTodoItemStatus(li, areShown);
+  const button = document.createElement("button");
+  button.textContent = "🗑️";
+  button.addEventListener("click", () => {
+    removeTodoItem(li);
     updateStats(todolist);
   });
 
-  button.addEventListener('click', () => {
-    removeTodoItem(li);
+  const input = document.createElement("input");
+  input.setAttribute("type", "checkbox");
+  input.setAttribute("name", "finished");
+  input.addEventListener("change", () => {
+    console.log("input", input.checked);
   });
 
-  list.appendChild(li);
-  checkListState(todolist);
+  const span = document.createElement("span");
+  span.classList.add("item");
+  span.textContent = text;
+
+  const label = document.createElement("label");
+
+  label.appendChild(input);
+  label.appendChild(span);
+  li.appendChild(label);
+  li.appendChild(button);
+
+  const list = todolist.querySelector("ul.list");
+  list?.appendChild(li);
 }
 
 /**
